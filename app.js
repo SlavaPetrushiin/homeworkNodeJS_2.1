@@ -1,9 +1,8 @@
 const http = require("http");
 
-console.log('new Date().toUTCString() ' + new Date().toUTCString())
-
 let userInterval = process.argv[2];
 let userEnd = process.argv[3];
+let count = 0;
 
 if(typeof userInterval === 'string' &&  typeof userEnd === 'string'){
 	userInterval = Number(userInterval);
@@ -14,14 +13,16 @@ if(typeof userInterval === 'string' &&  typeof userEnd === 'string'){
 }
 
 http.createServer((req, res) => {
+	console.log(req.url)
 	let now = new Date();
 	let nowStart = now.getTime();
 	let nowEnd = nowStart + userEnd;
 
 	let getDateConsole = setInterval(()=> {
 		let currentTime = new Date();
-		if(currentTime.getTime() <= nowEnd){
-			console.log(new Date().toUTCString());
+		if(currentTime.getTime() <= nowEnd && req.url !== '/favicon.ico'){
+			count++;
+			console.log(new Date().toUTCString(), count);
 		} else {
 			clearInterval(getDateConsole);
 		}
